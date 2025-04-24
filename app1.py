@@ -1,9 +1,8 @@
 import streamlit as st
-import preprocces, help
+import preprocces,help
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-st.set_page_config(layout="wide")
 st.sidebar.title("Whatsapp Chat Analyzer")
 
 uploaded_file = st.sidebar.file_uploader("Choose a file")
@@ -12,18 +11,21 @@ if uploaded_file is not None:
     data = bytes_data.decode("utf-8")
     df = preprocces.preprocess(data)
     st.dataframe(df)
+    
 
-    # fetch unique users
+
+    # fetch unique userss
     users_list = df['users'].unique().tolist()
+    
     users_list.sort()
-    users_list.insert(0, "Overall")
+    users_list.insert(0,"Overall")
 
-    selected_users = st.sidebar.selectbox("Show analysis", users_list)
+    selected_users = st.sidebar.selectbox("Show analysis ",users_list)
 
     if st.sidebar.button("Show Analysis"):
 
         # Stats Area
-        num_messages, words, num_media_messages, num_links = help.fetch_stats(selected_users, df)
+        num_messages, words, num_media_messages, num_links = help.fetch_stats(selected_users,df)
         st.title("Top Statistics")
         col1, col2, col3, col4 = st.columns(4)
 
@@ -42,9 +44,9 @@ if uploaded_file is not None:
 
         # monthly timeline
         st.title("Monthly Timeline")
-        timeline = help.monthly_timeline(selected_users, df)
-        fig, ax = plt.subplots()
-        ax.plot(timeline['time'], timeline['message'], color='green')
+        timeline = help.monthly_timeline(selected_users,df)
+        fig,ax = plt.subplots()
+        ax.plot(timeline['time'], timeline['message'],color='green')
         plt.xticks(rotation='vertical')
         st.pyplot(fig)
 
@@ -58,13 +60,13 @@ if uploaded_file is not None:
 
         # activity map
         st.title('Activity Map')
-        col1, col2 = st.columns(2)
+        col1,col2 = st.columns(2)
 
         with col1:
             st.header("Most busy day")
-            busy_day = help.week_activity_map(selected_users, df)
-            fig, ax = plt.subplots()
-            ax.bar(busy_day.index, busy_day.values, color='purple')
+            busy_day = help.week_activity_map(selected_users,df)
+            fig,ax = plt.subplots()
+            ax.bar(busy_day.index,busy_day.values,color='purple')
             plt.xticks(rotation='vertical')
             st.pyplot(fig)
 
@@ -72,52 +74,67 @@ if uploaded_file is not None:
             st.header("Most busy month")
             busy_month = help.month_activity_map(selected_users, df)
             fig, ax = plt.subplots()
-            ax.bar(busy_month.index, busy_month.values, color='orange')
+            ax.bar(busy_month.index, busy_month.values,color='orange')
             plt.xticks(rotation='vertical')
             st.pyplot(fig)
 
         st.title("Weekly Activity Map")
-        users_heatmap = help.activity_heatmap(selected_users, df)
-        fig, ax = plt.subplots()
+        users_heatmap = help.activity_heatmap(selected_users,df)
+        fig,ax = plt.subplots()
         ax = sns.heatmap(users_heatmap)
         st.pyplot(fig)
 
+        # finding the busiest userss in the group(Group level)
         if selected_users == 'Overall':
-            st.title('Most Busy Users')
-            x, new_df = help.most_busy_userss(df)
+            st.title('Most Busy Userss')
+            x,new_df = help.most_busy_userss(df)
             fig, ax = plt.subplots()
+
             col1, col2 = st.columns(2)
 
             with col1:
-                ax.bar(x.index, x.values, color='red')
+                ax.bar(x.index, x.values,color='red')
                 plt.xticks(rotation='vertical')
                 st.pyplot(fig)
             with col2:
                 st.dataframe(new_df)
 
+        # WordCloud
         st.title("Wordcloud")
-        df_wc = help.create_wordcloud(selected_users, df)
-        fig, ax = plt.subplots()
+        df_wc = help.create_wordcloud(selected_users,df)
+        fig,ax = plt.subplots()
         ax.imshow(df_wc)
         st.pyplot(fig)
 
+       # most common words
         most_common_df = help.most_common_words(selected_users, df)
+
         fig, ax = plt.subplots()
         ax.barh(most_common_df['Word'], most_common_df['Count'])
         plt.xticks(rotation='vertical')
+
         st.title('Most common words')
         st.pyplot(fig)
 
-        emoji_df = help.emoji_helper(selected_users, df)
+        # emoji analysis
+        emoji_df = help.emoji_helper(selected_users,df)
         st.title("Emoji Analysis")
-        col1, col2 = st.columns(2)
+
+        col1,col2 = st.columns(2)
 
         with col1:
             st.dataframe(emoji_df)
         with col2:
-            import matplotlib.font_manager as fm
-            emoji_font = fm.FontProperties(fname="C:/Windows/Fonts/seguiemj.ttf")  # change path based on OS
-            fig, ax = plt.subplots()
-            ax.pie(emoji_df['Count'].head(), labels=emoji_df['Emoji'].head(), autopct="%0.2f",
-                   textprops={'fontproperties': emoji_font})
+            fig,ax = plt.subplots()
+            ax.pie(emoji_df['Count'].head(), labels=emoji_df['Emoji'].head(), autopct="%0.2f")
             st.pyplot(fig)
+
+
+
+
+
+
+
+
+
+
