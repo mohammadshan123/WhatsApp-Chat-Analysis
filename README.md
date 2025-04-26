@@ -42,7 +42,7 @@ Analyze your WhatsApp chats using insightful statistics and visualizations. This
 ### 2. Setup
 
 
-git clone https://github.com/your-repo/whatsapp-analyzer
+git clone [https://github.com/your-repo/whatsapp-analyzer](https://github.com/mohammadshan123/WhatsApp-Chat-Analysis)
 cd whatsapp-analyzer
 pip install -r requirements.txt
 
