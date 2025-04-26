@@ -20,8 +20,8 @@ Analyze your WhatsApp chats using insightful statistics and visualizations. This
 
 ## 🧰 Tech Stack
 
-- **Frontend**: HTML (Flask `index.html`), Streamlit UI
-- **Backend**: Python, Flask, Streamlit
+- **Frontend**:  Streamlit UI
+- **Backend**: Python, Streamlit
 - **Data Analysis & Visualization**: Pandas, Matplotlib, Seaborn, WordCloud, Emoji, URLExtract
 
 ---
@@ -51,7 +51,5 @@ pip install -r requirements.txt
 
 streamlit run app1.py
 
-### Flask Web App
 
-python "app (4).py"
 
